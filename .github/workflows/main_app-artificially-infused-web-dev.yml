@@ -25,7 +25,7 @@ jobs:
         run: |
           npm install
           npm --prefix ../../ run build --if-present
-        working-directory: ${{github.workspace}}
+        # working-directory: ${{github.workspace}}
 
       # - name: Zip artifact for deployment
       #   run: zip release.zip ${{github.workspace}}/dist/game -r
