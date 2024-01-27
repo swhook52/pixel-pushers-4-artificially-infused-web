@@ -52,7 +52,7 @@ jobs:
           name: node-app
 
       - name: Unzip artifact for deployment
-        run: unzip dist/game
+        run: unzip release.zip
       
       - name: Login to Azure
         uses: azure/login@v1
@@ -67,5 +67,5 @@ jobs:
         with:
           app-name: 'app-artificially-infused-web-dev'
           slot-name: 'Production'
-          package: .
+          package: game
           
