@@ -69,5 +69,4 @@ jobs:
           app-name: 'app-artificially-infused-web-dev'
           slot-name: 'Production'
           package: dist/game/
-        working-directory: ${{github.workspace}}
           
