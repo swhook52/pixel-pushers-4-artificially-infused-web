@@ -68,5 +68,5 @@ jobs:
         with:
           app-name: 'app-artificially-infused-web-dev'
           slot-name: 'Production'
-          package: dist/game/
+          package: browser
           
