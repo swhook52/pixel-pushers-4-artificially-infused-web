@@ -1,0 +1,19 @@
+div {
+    display: flex;
+    flex-direction: column;
+    width: 240px;
+    gap: 20px;
+    color: #ffffff;
+
+    span {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+
+        label {
+            display: inline-block;
+            width: 52px;
+            text-align: right;
+        }
+    }
+}

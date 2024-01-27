@@ -1,0 +1,21 @@
+<div>
+    <span>
+        <label for="music">Music</label>
+        <mat-icon (click)="musicVolume === 0 ? musicVolume = 50 : musicVolume = 0">{{ musicVolume === 0 ? 'volume_off' : 'volume_up'}}</mat-icon>
+        <mat-slider min="0" max="100" (input)="musicVolume = $event" step="10" showTickMarks discrete [displayWith]="formatLabel">
+            <input matSliderThumb>
+        </mat-slider>
+    </span>
+    <span>
+        <label for="sfx">SFX</label>
+        <mat-icon (click)="sfxVolume === 0 ? sfxVolume = 50 : sfxVolume = 0">{{ sfxVolume === 0 ? 'volume_off' : 'volume_up'}}</mat-icon>
+        <input name="sfx" type="range" min="0" max="100" (input)="sfxVolume = $event" [value]="sfxVolume" />
+    </span>
+</div>
+
+<audio id="music-player" loop>
+    <source [src]="musicSrc$ | async" type="audio/mpeg">
+</audio>
+<audio id="sfx-player">
+    <source [src]="sfxSrc$ | async" type="audio/mpeg">
+</audio>

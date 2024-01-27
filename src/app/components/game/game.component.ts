@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
 import { GameService } from '../../game.service';
 import { Router } from '@angular/router';
+import { AudioPlayerComponent } from '../audio-player/audio-player.component';
 
 @Component({
   selector: 'app-game',
   standalone: true,
-  imports: [],
+  imports: [AudioPlayerComponent],
   templateUrl: './game.component.html',
   styleUrl: './game.component.scss'
 })
