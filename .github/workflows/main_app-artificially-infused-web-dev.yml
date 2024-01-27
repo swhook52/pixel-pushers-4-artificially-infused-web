@@ -23,18 +23,18 @@ jobs:
 
       - name: npm install, build, and test
         run: |
+          cd ..
           npm install
           npm run build --if-present
-        working-directory: ${{github.workspace}}
 
-      - name: Zip artifact for deployment
-        run: zip release.zip ${{github.workspace}}/dist/game -r
+      # - name: Zip artifact for deployment
+      #   run: zip release.zip ${{github.workspace}}/dist/game -r
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
         with:
           name: node-app
-          path: release.zip
+          # path: release.zip
 
   deploy:
     runs-on: ubuntu-latest
@@ -51,10 +51,10 @@ jobs:
         with:
           name: node-app
 
-      - name: Unzip artifact for deployment
-        run: |
-          unzip release.zip
-          rm release.zip
+      # - name: Unzip artifact for deployment
+      #   run: |
+      #     unzip release.zip
+      #     rm release.zip
       
       - name: Login to Azure
         uses: azure/login@v1
