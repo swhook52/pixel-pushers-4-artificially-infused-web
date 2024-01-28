@@ -25,9 +25,9 @@ export class RoundComponent implements OnInit {
     // if (this.server) {
     //   this.player = this.game.players.find()
     // }
-    var template = this.game.round.template;
+    var template = this.game.round?.template;
     const pattern = /({[^{}]+})/g;
-    this.templateParts = template.split(pattern);
+    this.templateParts = template?.split(pattern);
   }
 
 

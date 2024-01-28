@@ -38,7 +38,7 @@ export class GameService {
   }
 
   join(code: string, name: string, avatarUrl: string): Observable<[]>{
-    const payload: Player = {
+    const player: Player = {
       id: name,
       name: name,
       avatarUrl: avatarUrl,
@@ -49,7 +49,7 @@ export class GameService {
       adjectives: [],
       score: 0
     }
-    return this.http.post<[]>(`${this.apiBaseUrl}/${code}/player`, payload)
+    return this.http.post<[]>(`${this.apiBaseUrl}/${code}/player`, player)
     .pipe(
       take(1),
       catchError(() => {
@@ -58,7 +58,7 @@ export class GameService {
       }),
       tap(() => {
         this.pollGameData();
-        this.player$.next(payload);
+        this.player$.next(player);
       })
     );
   }
@@ -82,7 +82,6 @@ export class GameService {
       const code = this.game$.getValue().code;
       if (!code) return;
       this.http.get<Game>(`${this.apiBaseUrl}/${code}`).pipe(take(1)).subscribe((data) => {
-        console.log(data);
         this.game$.next(data);
       });
     }, 2000);

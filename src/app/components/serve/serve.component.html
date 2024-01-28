@@ -1,1 +1,5 @@
-<app-lobby [server]="true"></app-lobby>
+@if (game.round?.roundNumber){
+    <app-round [server]="true"></app-round>
+} @else {
+    <app-lobby [server]="true"></app-lobby>
+}

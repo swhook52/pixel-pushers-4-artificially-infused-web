@@ -3,7 +3,7 @@ export interface Game {
     eTag?: string;
     partitionKey?: string;
     players: Player[];
-    round: Round;
+    round?: Round;
     rowKey?: string;
     timestamp?: string;
 }
