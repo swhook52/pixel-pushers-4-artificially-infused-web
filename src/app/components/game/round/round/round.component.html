@@ -154,7 +154,7 @@
 
 @if (server && allPlayersHaveVoted()){
   @if (!loading){
-  <button (click)="endRound()">Next Round</button>
+  <button class="next-round" (click)="endRound()">Start Next Round</button>
   } @else {
       <button class="disabled">Starting...</button>
   }

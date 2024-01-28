@@ -3,6 +3,7 @@ import { LobbyComponent } from './lobby/lobby.component';
 import { GameService } from './game.service';
 import { Game } from './game.model';
 import { RoundComponent } from './round/round/round.component';
+import { distinctUntilChanged } from 'rxjs';
 
 @Component({
   selector: 'app-game',
@@ -15,7 +16,7 @@ export class GameComponent {
   game: Game = {} as Game;
 
   constructor(private service: GameService) {
-    this.service.game.subscribe((game) => {
+    this.service.game.pipe(distinctUntilChanged()).subscribe((game) => {
       this.game = game;
     });
   }

@@ -4,6 +4,7 @@ import { LobbyComponent } from '../game/lobby/lobby.component';
 import { GameService } from '../game/game.service';
 import { Game } from '../game/game.model';
 import { RoundComponent } from '../game/round/round/round.component';
+import { distinctUntilChanged } from 'rxjs';
 
 @Component({
   selector: 'app-serve',
@@ -18,7 +19,7 @@ export class ServeComponent implements OnInit{
   constructor(private service: GameService) {}
 
   ngOnInit(): void {
-    this.service.game.subscribe((game) => {
+    this.service.game.pipe(distinctUntilChanged()).subscribe((game) => {
       this.game = game;
       this.init = true;
     });

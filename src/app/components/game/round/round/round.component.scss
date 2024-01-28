@@ -386,6 +386,13 @@ section {
     }
 }
 
+.next-round{
+    position: fixed;
+    bottom: 80px;
+    right: 80px;
+    z-index: 5;
+}
+
 @keyframes down {
     0% {transform:  scale(2.0) translateY(10px); opacity: 0;}
     10% {transform:  scale(2.0) translateY(10px); opacity: 0.5;}

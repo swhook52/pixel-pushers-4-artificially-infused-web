@@ -5,7 +5,7 @@ import { AudioService } from '../../../audio-player/audio.service';
 import { CommonModule } from '@angular/common';
 import {MatSelectChange, MatSelectModule} from '@angular/material/select';
 import { FormsModule } from '@angular/forms';
-import { Subject, catchError, count, take, takeUntil } from 'rxjs';
+import { Subject, catchError, count, distinctUntilChanged, take, takeUntil } from 'rxjs';
 import { MatIconModule } from '@angular/material/icon';
 import { createAvatar } from '@dicebear/core';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -36,26 +36,19 @@ export class RoundComponent implements OnInit {
   constructor(private service: GameService, private audio: AudioService, private sanatizer: DomSanitizer) {}
   
   ngOnInit(): void {
-    this.service.game.pipe(takeUntil(this.onDestroy$)).subscribe((game) => {
+    this.service.game
+    .pipe(
+      distinctUntilChanged(),
+      takeUntil(this.onDestroy$)
+    ).subscribe((game) => {
       this.game = game;
       this.player = game.players.find(p => p.id == this.player.id) || this.player;
-      //this.addMockWorkds();
+      if (!this.game.round) return;  
+      const pattern = /({[^{}]+})/g;
+      this.templateParts = this.game.round.template.split(pattern);
     });
 
-    if (!this.game.round) return;
-
-    const pattern = /({[^{}]+})/g;
-    this.templateParts = this.game.round.template.split(pattern);
-
     if (!this.server && !this.player.id) this.player.id = localStorage.getItem('player') || '';
-  }
-
-  addMockWorkds() {
-    this.player.nouns = ['Jerry', 'Tony', 'Sara'];
-    this.player.verbs = ['ate', 'ran', 'jumped'];
-    this.player.locations = ['the park', 'the store', 'the beach'];
-    this.player.foods = ['pizza', 'burgers', 'ice cream'];
-    this.player.adjectives = ['beautiful', 'ugly', 'fast'];
   }
 
   updateWord(index: number, $event: MatSelectChange) {
