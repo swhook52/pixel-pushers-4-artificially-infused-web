@@ -21,12 +21,32 @@ export class AudioService {
     this.playMusic('lobby.mp3');
   }
 
-  playMainMenuMusic(){
+  playMainMenuMusic() {
     this.playMusic('mainMenu.mp3');
   }
 
-  playPromptEntryMusic(){
+  playPromptEntryMusic() {
     this.playMusic('playerPromptInput.mp3');
+  }
+
+  playNiceTastefulSophisticatedFart() {
+    this.playMusic('tastefulFart.mp3');
+  }
+
+  playBubbleSelect() {
+    this.playMusic('bubbleSelect.mp3');
+  }
+
+  playAirhorn() {
+    this.playMusic('djAirhorn.mp3');
+  }
+
+  playNeedleDrop() {
+    this.playMusic('djNeedleDrop.mp3');
+  }
+
+  playMultiPop() {
+    this.playMusic('multiPop.mp3');
   }
 
   get musicVolume(): BehaviorSubject<number>{
@@ -53,6 +73,10 @@ export class AudioService {
     this._musicPlyer.src = `../../../assets/audio/music/${filename}`;
     this._musicPlyer.load();
     this._musicPlyer.play();
+  }
+
+  private stopMusic() {
+    this._musicPlyer?.pause;
   }
 
   // playSfx() {

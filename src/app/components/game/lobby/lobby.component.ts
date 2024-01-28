@@ -3,6 +3,7 @@ import { GameService } from '../game.service';
 import { Subject, takeUntil } from 'rxjs';
 import { Game } from '../game.model';
 import { DomSanitizer } from '@angular/platform-browser';
+import { AudioService } from '../../.././components/audio-player/audio.service';
 
 @Component({
   selector: 'app-lobby',
@@ -16,11 +17,12 @@ export class LobbyComponent implements OnInit, OnDestroy {
 
   private onDestroy$ = new Subject<void>();
 
-  constructor(private service: GameService, private sanatizer: DomSanitizer) {}
+  constructor(private service: GameService, private sanatizer: DomSanitizer, private audio: AudioService) {}
 
   ngOnInit(): void {
     this.service.game.pipe(takeUntil(this.onDestroy$)).subscribe((game) => {
       this.game = game;
+      this.audio.playLobbyMusic();
     });
   }
 
