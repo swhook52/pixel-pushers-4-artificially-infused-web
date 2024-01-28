@@ -71,8 +71,13 @@
     <p *ngIf="!allPlayersHaveSubmitted() || !allImagesHaveBeenGenerated()">Awaiting other players...</p>
     <p *ngIf="allImagesHaveBeenGenerated()">Tap your favorite...</p>
     <div class="voting" *ngIf="allImagesHaveBeenGenerated()">
-      @for (solution of game.round?.solutions; track solution;){
-        <img (click)="voteFor(solution.playerId)" [src]="solution.imageUrl" [alt]="solution.prompt">
+      @if (!alreadyVoted) {
+        @for (solution of game.round?.solutions; track solution;){
+            <img (click)="voteFor(solution.playerId)" [src]="solution.imageUrl" [alt]="solution.prompt">
+        }
+      }
+      @else {
+        <p>We got your vote! Waiting for others...</p>
       }
     </div>
   </div>
