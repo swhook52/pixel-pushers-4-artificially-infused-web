@@ -109,6 +109,19 @@ export class GameService {
     );
   }
 
+  endRound(): Observable<void>{
+    const code = this.game$.getValue().code;
+
+    return this.http.post<void>(`${this.apiBaseUrl}/${code}/endround`, null)
+    .pipe(
+      take(1),
+      catchError(() => {
+        this.snackbar.open('Failed to end round', 'Close', { duration: 7000 });
+        return [];
+      })
+    );
+  }
+
   private pollGameData(): void{
     if (this.interval) window.clearInterval(this.interval);
 

@@ -125,5 +125,9 @@ export class RoundComponent implements OnInit {
     score += this.game.players.find(p => p.id == playerId)?.score || 0;
     return score;
   }
+
+  endRound() {
+    this.service.endRound().pipe(take(1)).subscribe();
+  }
     
 }

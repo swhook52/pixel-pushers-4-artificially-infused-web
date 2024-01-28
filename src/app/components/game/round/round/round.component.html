@@ -151,3 +151,13 @@
 @if(server && !allPlayersHaveVoted()){
 <p class="notice">Check your mobile device, fool! <mat-icon>arrow_downward</mat-icon></p>
 }
+
+@if (server && allPlayersHaveVoted()){
+  @if (!loading){
+  <button (click)="endRound()">Next Round</button>
+  } @else {
+      <button class="disabled">Starting...</button>
+  }
+} @else {
+  <small class="status">Waiting for host to start the game...</small>
+}
