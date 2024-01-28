@@ -67,12 +67,14 @@
 @if((playerHasSubmitted()) && !server && !allPlayersHaveVoted() && !generatingImage){
   <div class="waiting">
     <mat-spinner *ngIf="!allImagesHaveBeenGenerated()"></mat-spinner>
-    <p *ngIf="!allPlayersHaveSubmitted() || !allImagesHaveBeenGenerated()">Awaiting other players...</p>
-    <p *ngIf="allImagesHaveBeenGenerated()">Tap your favorite...</p>
-    <div class="voting" *ngIf="allImagesHaveBeenGenerated()">
+    <p *ngIf="(!allPlayersHaveSubmitted() || !allImagesHaveBeenGenerated()) && !alreadyVoted">Awaiting other players...</p>
+    <p *ngIf="allImagesHaveBeenGenerated() && !alreadyVoted">Tap your favorite...</p>
+    <div class="voting" *ngIf="allImagesHaveBeenGenerated() && !alreadyVoted">
       @if (!alreadyVoted) {
         @for (solution of game.round?.solutions; track solution;){
+          @if(solution.playerId !== player.id){
             <img (click)="voteFor(solution.playerId)" [src]="solution.imageUrl" [alt]="solution.prompt">
+          }
         }
       }
       @else {
@@ -82,7 +84,7 @@
   </div>
 }
 
-@if(generatingImage){
+@if(generatingImage && !alreadyVoted){
   <div class="waiting">
     <mat-spinner></mat-spinner>
     <p>Generating your masterpiece...</p>

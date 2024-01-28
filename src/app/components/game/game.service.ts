@@ -131,7 +131,7 @@ export class GameService {
       this.fetchGameData();
     }, 2000);
 
-    //setTimeout(() => { if (this.interval) window.clearInterval(this.interval); }, 3000);
+    setTimeout(() => { if (this.interval) window.clearInterval(this.interval); }, 3000);
   }
   
   private fetchGameData(): void{
