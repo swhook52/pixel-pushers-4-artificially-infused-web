@@ -29,5 +29,11 @@ section{
         border-radius: 10px;
         cursor: pointer;
         margin-bottom: 20px;
+        transition: all 0.2s ease-out;
+        border: solid 4px #ffffff;
+
+        &:hover {
+            background: rgba(255,255,255,0.1);
+        }
     }
 }

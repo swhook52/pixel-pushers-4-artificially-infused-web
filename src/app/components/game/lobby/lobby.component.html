@@ -1,1 +1,12 @@
-<p>lobby works!</p>
+<h1><small>Join Code</small>{{game.code}}</h1>
+<section>
+<h2>Waiting for players...</h2>
+<div class="players">
+@for (player of game.players; track player){
+        <span>
+            <div [innerHTML]="getSvg(player.avatarUrl)"></div>
+            <p>{{player.name}}</p>
+        </span>
+    }
+</div>
+</section>

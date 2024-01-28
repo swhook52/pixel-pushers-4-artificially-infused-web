@@ -18,6 +18,10 @@ html{
     background-image: url('./assets/dark-honeycomb.png');
 }
 
+app-root.blur {
+  filter: blur(10px);
+}
+
 button {
     background: rgba(50,117,187,0.75);
     border: 4px solid rgba(50,117,187,1);

@@ -3,17 +3,20 @@ export interface Game {
     eTag?: string;
     partitionKey?: string;
     players: Player[];
-    rounds: Round[];
+    round: Round;
     rowKey?: string;
     timestamp?: string;
 }
 
 export interface Player {
-    playerId: number;
+    id: number;
     name: string;
     avatarUrl: string;
     nouns: string[];
     verbs: string[];
+    locations: string[];
+    foods: string[];
+    adjectives: string[];
     score: number
 }
 
@@ -26,6 +29,6 @@ export interface Round {
 export interface Solutions {
     playerId: number;
     prompt: string;
-    ImageUrl: string;
+    imageUrl: string;
     votes: number;
 }
