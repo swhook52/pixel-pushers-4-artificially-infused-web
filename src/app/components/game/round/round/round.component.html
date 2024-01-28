@@ -64,10 +64,9 @@
     }
 </div>
 
-@if((playerHasSubmitted() || generatingImage) && !server && !allPlayersHaveVoted()){
+@if((playerHasSubmitted()) && !server && !allPlayersHaveVoted() && !generatingImage){
   <div class="waiting">
     <mat-spinner *ngIf="!allImagesHaveBeenGenerated()"></mat-spinner>
-    <p *ngIf="generatingImage">Generating your masterpiece...</p>
     <p *ngIf="!allPlayersHaveSubmitted() || !allImagesHaveBeenGenerated()">Awaiting other players...</p>
     <p *ngIf="allImagesHaveBeenGenerated()">Tap your favorite...</p>
     <div class="voting" *ngIf="allImagesHaveBeenGenerated()">
@@ -75,6 +74,13 @@
         <img (click)="voteFor(solution.playerId)" [src]="solution.imageUrl" [alt]="solution.prompt">
       }
     </div>
+  </div>
+}
+
+@if(generatingImage){
+  <div class="waiting">
+    <mat-spinner></mat-spinner>
+    <p>Generating your masterpiece...</p>
   </div>
 }
 
@@ -119,7 +125,19 @@
 
 @if(allPlayersHaveVoted()){
   <div class="summary">
-    Round Summary Goes HERE....
+
+    @for (solution of cachedSolutions; track solution;){
+      <article>
+        <span class="votes">{{solution.votes}} <mat-icon>star</mat-icon></span>
+        <img [src]="solution.imageUrl" />
+        <span class="player">
+            <div [innerHTML]="getSvg(getPlayer(solution.playerId)!.avatarUrl)"></div>
+            <p>{{getPlayer(solution.playerId)!.id}}</p>
+          </span>
+          <span class="score">{{getPlayerScore(solution.playerId)}}<small>score</small></span>
+      </article>
+    }
+
   </div>
 }
 

@@ -28,6 +28,7 @@ export class RoundComponent implements OnInit {
   templateParts: string[] = [];
   words: string[] = [];
   generatingImage: boolean = false;
+  cachedSolutions: any = null;
 
   private onDestroy$ = new Subject<void>();
   
@@ -103,11 +104,19 @@ export class RoundComponent implements OnInit {
   allPlayersHaveVoted(): boolean {
     let count = 0;
     this.game.round?.solutions.forEach(s => count += s.votes);
+    if (count == this.game.players.length) this.cachedSolutions = this.game.round?.solutions;
     return count == this.game.players.length;
   }
 
   voteFor(id: string) {
     this.service.vote(id).pipe(take(1)).subscribe();
+  }
+
+  getPlayerScore(playerId: string): number {
+    let score = 0;
+    score += this.game.round?.solutions.find(s => s.playerId == playerId)?.votes || 0;
+    score += this.game.players.find(p => p.id == playerId)?.score || 0;
+    return score;
   }
     
 }
