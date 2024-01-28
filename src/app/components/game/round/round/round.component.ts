@@ -21,7 +21,7 @@ import { MatProgressSpinner } from '@angular/material/progress-spinner';
 })
 export class RoundComponent implements OnInit {
   @Input() server: boolean = false;
-  
+
   loading: boolean = false;
   game: Game = this.service.game.getValue();
   player: Player = this.service.player.getValue();
@@ -29,9 +29,10 @@ export class RoundComponent implements OnInit {
   words: string[] = [];
   generatingImage: boolean = false;
   cachedSolutions: any = null;
+  alreadyVoted: boolean = false;
 
   private onDestroy$ = new Subject<void>();
-  
+
   constructor(private service: GameService, private audio: AudioService, private sanatizer: DomSanitizer) {}
   
   ngOnInit(): void {
@@ -108,8 +109,14 @@ export class RoundComponent implements OnInit {
     return count == this.game.players.length;
   }
 
-  voteFor(id: string) {
-    this.service.vote(id).pipe(take(1)).subscribe();
+  voteFor(playerId: string) {
+    if (this.alreadyVoted || playerId === this.player.id)
+    {
+      return;
+    }
+
+    this.service.vote(playerId).pipe(take(1)).subscribe();
+    this.alreadyVoted = true;
   }
 
   getPlayerScore(playerId: string): number {
