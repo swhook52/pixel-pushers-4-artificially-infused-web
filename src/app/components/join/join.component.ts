@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { GameService } from '../game/game.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -6,6 +6,7 @@ import { PlayerInfoComponent } from './player-info/player-info.component';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { catchError, finalize, take } from 'rxjs';
 import { Router } from '@angular/router';
+import { AudioService } from '../audio-player/audio.service';
 
 @Component({
   selector: 'app-join',
@@ -14,14 +15,15 @@ import { Router } from '@angular/router';
   templateUrl: './join.component.html',
   styleUrl: './join.component.scss'
 })
-export class JoinComponent {
+export class JoinComponent implements OnInit {
   gameId: string = '';
   name: string = '';
   avatarUrl: string = '';
   loading = false;
+  playing = false;
   root = document.querySelector('app-root') as HTMLElement;
 
-  constructor(private game: GameService, private dialog: MatDialog, private router: Router ) { }
+  constructor(private game: GameService, private dialog: MatDialog, private router: Router, private audio: AudioService) { }
 
   setGameId(inputEvent: Event): void {
     if(!inputEvent.target) return;
@@ -49,5 +51,12 @@ export class JoinComponent {
           this.router.navigate([`/game/${this.gameId}`]);
         });
       });
+  }
+
+  ngOnInit(): void {
+    document.body.addEventListener('mousemove', ()=> { 
+      if (this.playing) return;
+      this.playing = true;
+      this.audio.playMainMenuMusic(); } );
   }
 }
