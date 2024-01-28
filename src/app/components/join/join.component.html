@@ -3,7 +3,7 @@
     <img src="./../../../assets/logo.png" alt="logo" class="logo">
     <div [class.loading]="loading">
         @if (!loading) {
-            <input type="text" (input)="setGameId($event)" placeholder="Game ID">
+            <input type="text" (input)="setGameId($event)" placeholder="Join Code">
             <button (click)="join()">Join</button>
         } @else {
             <mat-spinner></mat-spinner>

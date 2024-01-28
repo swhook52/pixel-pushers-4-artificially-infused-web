@@ -137,6 +137,7 @@ export class RoundComponent implements OnInit {
     console.log('calling end round');
     this.service.endRound().pipe(take(1)).subscribe(p => {
       console.log('round end. resetting vote');
+      this.game = {} as Game;
       this.alreadyVoted = false;
       this.cachedSolutions = null;
     });

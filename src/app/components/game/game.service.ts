@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { BehaviorSubject, Observable, catchError, take, tap } from 'rxjs';
+import { BehaviorSubject, Observable, catchError, finalize, take, tap } from 'rxjs';
 import { Game, Player, Round } from './game.model';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
@@ -119,6 +119,9 @@ export class GameService {
       catchError(() => {
         this.snackbar.open('Failed to end round', 'Close', { duration: 7000 });
         return [];
+      }),
+      finalize(() => {
+        this.init();
       })
     );
   }
