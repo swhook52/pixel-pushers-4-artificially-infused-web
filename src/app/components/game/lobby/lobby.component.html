@@ -11,7 +11,11 @@
 </div>
 </section>
 @if (server){
+    @if (!loading){
     <button (click)="startGame()">Start Game</button>
+    } @else {
+        <button class="disabled">Starting...</button>
+    }
 } @else {
     <small class="status">Waiting for host to start the game...</small>
 }

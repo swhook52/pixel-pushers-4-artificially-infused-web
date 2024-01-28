@@ -58,8 +58,16 @@ export class GameService {
     );
   }
 
-  startGame() {
-    
+  startGame(): Observable<void>{
+    const code = this.game$.getValue().code;
+    return this.http.post<void>(`${this.apiBaseUrl}/${code}/start`, null)
+    .pipe(
+      take(1),
+      catchError(() => {
+        this.snackbar.open('Failed to start game', 'Close', { duration: 7000 });
+        return [];
+      })
+    );
   }
 
   private pollGameData(): void{

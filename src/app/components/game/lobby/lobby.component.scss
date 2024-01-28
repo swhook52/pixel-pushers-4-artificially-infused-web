@@ -62,7 +62,19 @@ section{
     font-size: 140%;
     color: #ffffff;
     text-shadow: 0 0 10px #000000;
-    animation: pulse 5s linear infinite;
+    animation: pulse 5s 5s linear infinite;
+}
+
+button {
+    position: fixed;
+    bottom: 80px;
+    right: 80px;
+    font-size: 160%;
+    animation: pulse 5s 5s linear infinite;
+
+    &:hover{
+        animation: none;
+    }
 }
 
 @-webkit-keyframes pulse {

@@ -32,6 +32,13 @@ button {
     transition: all 0.2s ease-out;
     letter-spacing: 1px;
 
+    &.disabled{
+        pointer-events: none;
+        opacity: 0.5;
+        filter: grayscale(1);
+        animation: none;
+    }
+
     &:hover{
         cursor: pointer;
         background: rgba(50,117,187,0.9);

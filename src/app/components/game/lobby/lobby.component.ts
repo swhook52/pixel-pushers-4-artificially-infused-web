@@ -1,6 +1,6 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { GameService } from '../game.service';
-import { Subject, takeUntil } from 'rxjs';
+import { Subject, catchError, take, takeUntil } from 'rxjs';
 import { Game } from '../game.model';
 import { DomSanitizer } from '@angular/platform-browser';
 import { AudioService } from '../../.././components/audio-player/audio.service';
@@ -14,6 +14,7 @@ import { AudioService } from '../../.././components/audio-player/audio.service';
 })
 export class LobbyComponent implements OnInit, OnDestroy {
   @Input() server: boolean = false;
+  loading: boolean = false;
   game: Game = this.service.game.getValue();
 
   private onDestroy$ = new Subject<void>();
@@ -37,6 +38,15 @@ export class LobbyComponent implements OnInit, OnDestroy {
   }
 
   startGame(): void {
-    //this.service.startGame().subscribe();
+    this.loading = true;
+    this.service.startGame()
+    .pipe(
+      take(1),
+      catchError(() => { 
+        this.loading = false;
+        return [];
+      }),
+    )
+    .subscribe();
   }
 }
