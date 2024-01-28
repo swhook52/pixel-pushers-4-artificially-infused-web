@@ -36,7 +36,6 @@ export class RoundComponent implements OnInit {
     this.service.game.pipe(takeUntil(this.onDestroy$)).subscribe((game) => {
       this.game = game;
       this.player = game.players.find(p => p.id == this.player.id) || this.player;
-      this.addMockWorkds();
     });
 
     if (!this.game.round) return;
@@ -45,14 +44,6 @@ export class RoundComponent implements OnInit {
     this.templateParts = this.game.round.template.split(pattern);
 
     if (!this.server && !this.player.id) this.player.id = localStorage.getItem('player') || '';
-  }
-
-  addMockWorkds() {
-    this.player.nouns = ['Jerry', 'Tony', 'Sara'];
-    this.player.verbs = ['ate', 'ran', 'jumped'];
-    this.player.locations = ['the park', 'the store', 'the beach'];
-    this.player.foods = ['pizza', 'burgers', 'ice cream'];
-    this.player.adjectives = ['beautiful', 'ugly', 'fast'];
   }
 
   updateWord(index: number, $event: MatSelectChange) {
