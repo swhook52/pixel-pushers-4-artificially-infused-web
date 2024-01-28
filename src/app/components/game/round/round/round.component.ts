@@ -32,6 +32,7 @@ export class RoundComponent implements OnInit {
   alreadyVoted: boolean = false;
   carouselCount: number = 0
   carouselInterval: any;
+  carouselInitialized: boolean = false;
 
   private onDestroy$ = new Subject<void>();
 
@@ -56,6 +57,13 @@ export class RoundComponent implements OnInit {
       if (!this.game.round) return;  
       const pattern = /({[^{}]+})/g;
       this.templateParts = this.game.round.template.split(pattern);
+      if (this.allImagesHaveBeenGenerated() && !this.carouselInitialized) {
+        this.initCarousel();
+        this.carouselInitialized = true;
+      } else if (!this.allImagesHaveBeenGenerated()) {
+        clearInterval(this.carouselInterval);
+        this.carouselInitialized = false;
+      }
     });
 
     if (!this.server && !this.player.id) this.player.id = localStorage.getItem('player') || '';
@@ -69,9 +77,12 @@ export class RoundComponent implements OnInit {
       }, 1000);
       return;
     }
+    document.querySelectorAll('.solution').forEach((s, i) => {
+      s.classList.remove('active');
+    });
     this.carouselCount = 0;
     this.carouselNext();
-    if (this.carouselInterval) clearInterval(this.carouselInterval);
+    clearInterval(this.carouselInterval);
     this.carouselInterval = setInterval(() => {
       this.carouselNext();
     }, 12500);
@@ -81,14 +92,16 @@ export class RoundComponent implements OnInit {
       const total = document.querySelectorAll('.solution').length;
       const active = document.querySelector('.solution.active');
       console.log(active);
-      if (!active || this.carouselCount >= total){
-        this.carouselCount = 0;
-        document.querySelectorAll('.solution')[0]?.classList.add('active');
-        this.carouselCount++;
+      if (!active || this.carouselCount > total - 1){
+        this.carouselCount = 1;
+        document.querySelectorAll('.solution').forEach((e, i) => {
+          e.classList.remove('active');
+          if (i == 0) e.classList.add('active');
+        });
         return;
       }
-      console.log(this.carouselCount);
       active.classList.remove('active');
+      console.log(this.carouselCount);
       const next = document.querySelectorAll('.solution')[this.carouselCount];
       next?.classList.add('active');
       this.carouselCount++;
@@ -135,7 +148,8 @@ export class RoundComponent implements OnInit {
   }
 
   allImagesHaveBeenGenerated(): boolean {
-    return this.game.round?.solutions.every(s => s.imageUrl) || false;
+    const allGenerated = this.game.round?.solutions.every(s => s.imageUrl) || false;
+    return allGenerated;
   }
 
   allPlayersHaveVoted(): boolean {
