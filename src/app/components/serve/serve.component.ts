@@ -1,6 +1,4 @@
 import { Component } from '@angular/core';
-import { GameService } from '../../game.service';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-serve',
@@ -10,8 +8,6 @@ import { Router } from '@angular/router';
   styleUrl: './serve.component.scss'
 })
 export class ServeComponent {
-  id: string = this.game.id;
-  constructor(private game: GameService, private router: Router) {
-    if (!this.id) this.router.navigate(['/create']);
+  constructor() {
   }
 }

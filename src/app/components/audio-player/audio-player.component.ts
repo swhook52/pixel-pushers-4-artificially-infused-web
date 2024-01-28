@@ -13,11 +13,9 @@ import { AsyncPipe } from '@angular/common';
   styleUrl: './audio-player.component.scss'
 })
 export class AudioPlayerComponent {
-  private _musicVolume: number = 50;
-  private _sfxVolume: number = 50;
-
-  musicSrc$: BehaviorSubject<string> = this.service.musicSrc$;
-  sfxSrc$: BehaviorSubject<string> = this.service.sfxSrc$;
+  _musicVolume: BehaviorSubject<number> = this.service.musicVolume;
+  _sfxVolume: BehaviorSubject<number> = this.service.sfxVolume;
+  open = false;
 
   constructor(private service: AudioService) {
     this.service.init();
@@ -28,20 +26,20 @@ export class AudioPlayerComponent {
   }
 
   get musicVolume(): number {
-    return this._musicVolume;
+    return this._musicVolume.getValue();
+  }
+
+  get sfxVolume(): number {
+    return this._sfxVolume.getValue();
   }
 
   set musicVolume(eventOrValue: Event | number) {
     const value = eventOrValue instanceof Event ? parseInt((eventOrValue.target as HTMLInputElement).value) : eventOrValue;
-    this._musicVolume = value;
-  }
-
-  get sfxVolume(): number {
-    return this._sfxVolume;
+    this.service.musicVolume = value;
   }
 
   set sfxVolume(eventOrValue: Event | number) {
     const value = eventOrValue instanceof Event ? parseInt((eventOrValue.target as HTMLInputElement).value) : eventOrValue;
-    this._sfxVolume = value;
+    this.service.sfxVolume = value;
   }
 }
