@@ -19,6 +19,7 @@ export class CreateComponent implements OnInit {
 
   create(){
     this.loading = true;
+    this.audio.playNiceTastefulSophisticatedFart();
     this.game.create().pipe(
         catchError(() => {
           this.loading = false;
