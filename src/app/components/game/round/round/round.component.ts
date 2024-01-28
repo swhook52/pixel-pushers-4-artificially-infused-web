@@ -107,13 +107,13 @@ export class RoundComponent implements OnInit {
     return count == this.game.players.length;
   }
 
-  voteFor(id: string) {
-    if (this.alreadyVoted)
+  voteFor(playerId: string) {
+    if (this.alreadyVoted || playerId === this.player.id)
     {
       return;
     }
 
-    this.service.vote(id).pipe(take(1)).subscribe();
+    this.service.vote(playerId).pipe(take(1)).subscribe();
     this.alreadyVoted = true;
   }
     
