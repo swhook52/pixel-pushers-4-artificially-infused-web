@@ -20,9 +20,9 @@ export class LobbyComponent implements OnInit, OnDestroy {
   constructor(private service: GameService, private sanatizer: DomSanitizer, private audio: AudioService) {}
 
   ngOnInit(): void {
+    this.audio.playLobbyMusic();
     this.service.game.pipe(takeUntil(this.onDestroy$)).subscribe((game) => {
       this.game = game;
-      this.audio.playLobbyMusic();
     });
   }
 
