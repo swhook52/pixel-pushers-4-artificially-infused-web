@@ -1,8 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { ActivatedRoute, ParamMap, Router } from '@angular/router';
-import { BehaviorSubject, switchMap, take } from 'rxjs';
+import { Router } from '@angular/router';
+import { BehaviorSubject, Observable, catchError, take, tap } from 'rxjs';
 import { Game } from './game.model';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,7 @@ export class GameService {
   private interval: number | null = null;
   private game$: BehaviorSubject<Game> = new BehaviorSubject<Game>({ code: "", players: [], rounds: [] });
 
-  constructor(private router: Router, private http: HttpClient) {
+  constructor(private router: Router, private http: HttpClient, private snackbar: MatSnackBar) {
     this.init();
   }
 
@@ -20,13 +21,18 @@ export class GameService {
     return this.game$;
   }
 
-  create(): void{
-    this.http.post(`${this.apiBaseUrl}/`, null).pipe(take(1)).subscribe((res) => {
-      console.log(res);
-      // this.id$.next(id);
-      // this.router.navigate(['/serve', id]);
-      // this.pollGameData();
-    });
+  create(): Observable<Game>{
+    return this.http.post<Game>(`${this.apiBaseUrl}/`, null)
+    .pipe(
+      take(1),
+      catchError(() => {
+        this.snackbar.open('Failed to create game', 'Close', { duration: 7000 });
+        return [];
+      }),
+      tap((game) => {
+          this.game$.next(game);
+      })
+    );
   }
 
   join(code: string, name: string, avatarUrl: string): void{
@@ -38,11 +44,16 @@ export class GameService {
       verbs: [],
       score: 0
     }
-    this.http.post(`${this.apiBaseUrl}/${code}/player`, payload).pipe(take(1)).subscribe((res) => {
-      console.log(res);
-      // this.id$.next(id);
-      // this.router.navigate(['/game', inputId]);
-      // this.pollGameData();
+    console.log(payload);
+    this.http.post(`${this.apiBaseUrl}/${code}/player`, payload)
+    .pipe(
+      take(1),
+      catchError(() => {
+        this.snackbar.open('Game not found', 'Close', { duration: 7000 });
+        return [];
+      })
+    ).subscribe(() => {
+        this.router.navigate(['/game', code]);
     });
   }
 

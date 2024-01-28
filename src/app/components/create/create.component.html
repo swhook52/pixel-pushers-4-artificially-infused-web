@@ -1,5 +1,9 @@
 <div class="bg"></div>
 <section>
     <img src="./../../../assets/logo.png" alt="logo" class="logo">
+    @if (!loading) {
     <button (click)="create()">Create Game</button>
+    } @else {
+        <mat-spinner></mat-spinner>
+    }
 </section>

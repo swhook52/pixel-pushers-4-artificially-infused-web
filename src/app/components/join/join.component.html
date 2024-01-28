@@ -1,8 +1,12 @@
 <div class="bg"></div>
 <section>
     <img src="./../../../assets/logo.png" alt="logo" class="logo">
-    <div>
-        <input type="text" (input)="setGameId($event)" placeholder="Game ID">
-        <button (click)="join()">Join</button>
+    <div [class.loading]="loading">
+        @if (!loading) {
+            <input type="text" (input)="setGameId($event)" placeholder="Game ID">
+            <button (click)="join()">Join</button>
+        } @else {
+            <mat-spinner></mat-spinner>
+        }
     </div>
 </section>

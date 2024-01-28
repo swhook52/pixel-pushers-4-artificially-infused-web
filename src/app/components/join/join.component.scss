@@ -11,6 +11,11 @@ section{
         align-items: center;
         justify-content: center;
         box-shadow: 0 0 10px rgba(0,0,0,0.5);
+
+        &.loading{
+            opacity: 0.5;
+            box-shadow: none;
+        }
     }
 }
 
@@ -51,6 +56,10 @@ input {
 
 button:hover {
     transform: none;
+}
+
+mat-spinner{
+    box-shadow: none;
 }
 
 @-webkit-keyframes scroll {
