@@ -150,3 +150,23 @@ input[type=range]::-webkit-slider-thumb {
   input[type=range]:focus::-ms-fill-upper {
     background: #367ebd;
   }
+
+  /* width */
+::-webkit-scrollbar {
+  width: 1px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f100;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #88888800;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #55555500;
+}

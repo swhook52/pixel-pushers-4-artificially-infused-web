@@ -1,6 +1,6 @@
 <div class="timer" *ngIf="!allPlayersHaveSubmitted()" [class.server]="server">0:00</div>
 <section>
-<div class="prompt" *ngIf="!server && player && !playerHasSubmitted()">
+<div class="prompt" *ngIf="!server && player && !playerHasSubmitted() && !generatingImage && !allPlayersHaveVoted()">
     @for (part of templateParts; track $index) {
         @if (part === '{NOUN}') {
             <mat-form-field>
@@ -64,16 +64,21 @@
     }
 </div>
 
-@if(playerHasSubmitted() && !server){
+@if((playerHasSubmitted() || generatingImage) && !server && !allPlayersHaveVoted()){
   <div class="waiting">
     <mat-spinner *ngIf="!allImagesHaveBeenGenerated()"></mat-spinner>
-    <p *ngIf="allPlayersHaveSubmitted() && !allImagesHaveBeenGenerated()">Generating Masterpieces...</p>
-    <p *ngIf="!allPlayersHaveSubmitted()">Awaiting other players...</p>
-    <p *ngIf="allImagesHaveBeenGenerated()">Get ready to vote!</p>
+    <p *ngIf="generatingImage">Generating your masterpiece...</p>
+    <p *ngIf="!allPlayersHaveSubmitted() || !allImagesHaveBeenGenerated()">Awaiting other players...</p>
+    <p *ngIf="allImagesHaveBeenGenerated()">Tap your favorite...</p>
+    <div class="voting" *ngIf="allImagesHaveBeenGenerated()">
+      @for (solution of game.round?.solutions; track solution;){
+        <img (click)="voteFor(solution.playerId)" [src]="solution.imageUrl" [alt]="solution.prompt">
+      }
+    </div>
   </div>
 }
 
-@if(server) {
+@if(server && !allPlayersHaveVoted()) {
   <div *ngIf="!allPlayersHaveSubmitted()" class="prompt server">
       @for (part of templateParts; track $index) {
           @if (part.startsWith('{')) {
@@ -92,31 +97,13 @@
 
   <div *ngIf="allPlayersHaveSubmitted() && allImagesHaveBeenGenerated()" class="carousel">
     <div>
-
-      <!-- This FOR simulates active, can/should/WILL be removed-->
       @for (solution of game.round?.solutions; track solution;){
           <article class="active">
             <span class="votes">{{solution.votes}} <mat-icon>star</mat-icon></span>
             <img [src]="solution.imageUrl" />
-            <span class="player">
-                <div [innerHTML]="getSvg(getPlayer(solution.playerId)!.avatarUrl)"></div>
-                <p>{{getPlayer(solution.playerId)!.id}}</p>
-            </span>
             <caption>{{solution.prompt}}</caption>
           </article>
       }
-
-      @for (solution of game.round?.solutions; track solution;){
-        <article>
-          <span class="votes">{{solution.votes}} <mat-icon>star</mat-icon></span>
-          <img [src]="solution.imageUrl" />
-          <span class="player">
-              <div [innerHTML]="getSvg(getPlayer(solution.playerId)!.avatarUrl)"></div>
-              <p>{{getPlayer(solution.playerId)!.id}}</p>
-          </span>
-          <caption>{{solution.prompt}}</caption>
-        </article>
-    }
     </div>
   </div>
 
@@ -130,8 +117,14 @@
   </div>
 }
 
+@if(allPlayersHaveVoted()){
+  <div class="summary">
+    Round Summary Goes HERE....
+  </div>
+}
+
 </section>
 
-@if(server){
+@if(server && !allPlayersHaveVoted()){
 <p class="notice">Check your mobile device, fool! <mat-icon>arrow_downward</mat-icon></p>
 }

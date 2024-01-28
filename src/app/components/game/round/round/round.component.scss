@@ -148,7 +148,7 @@ section {
             display: flex;
             flex-direction: column;
             transform: scale(0.8);
-            filter: blur(5px) grayscale(100%);
+            filter: blur(5px) grayscale(100%) drop-shadow(0 0 20px rgba(0, 0, 0, 0.5));
             opacity: 0.5;
             z-index: 0;
             transition: all 0.5s ease-out;
@@ -159,7 +159,7 @@ section {
 
             &.active {
                 transform: scale(1);
-                filter: blur(0) grayscale(0);
+                filter: blur(0) grayscale(0) drop-shadow(0 0 20px rgba(0, 0, 0, 0.5));
                 opacity: 1;
                 z-index: 1;
             }
@@ -186,8 +186,8 @@ section {
 
             caption {
                 position: absolute;
-                left: 15vh;
-                bottom: 5vh;
+                left: 0;
+                bottom: 10vh;
                 font-size: 130%;
                 text-align: left;
                 background: rgba(255, 255, 255, 0.85);
@@ -229,6 +229,26 @@ section {
                 }
             }
         }
+    }
+}
+
+.voting {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    max-height: 90vh;
+    overflow: auto;
+    gap: 20px;
+    flex-wrap: wrap;
+
+    img {
+        height: 20vh;
+        width: 20vh;
+        border-radius: 5px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        border: solid 4px rgba(255, 255, 255, 1);
+        cursor: pointer;
     }
 }
 

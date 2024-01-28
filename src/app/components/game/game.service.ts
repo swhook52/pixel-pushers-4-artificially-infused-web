@@ -96,6 +96,19 @@ export class GameService {
     );
   }
 
+  vote(voteFor: string): Observable<void>{
+    const code = this.game$.getValue().code;
+
+    return this.http.post<void>(`${this.apiBaseUrl}/${code}/player/${voteFor}/vote`, null)
+    .pipe(
+      take(1),
+      catchError(() => {
+        this.snackbar.open('Failed to cast vote', 'Close', { duration: 7000 });
+        return [];
+      })
+    );
+  }
+
   private pollGameData(): void{
     if (this.interval) window.clearInterval(this.interval);
 
