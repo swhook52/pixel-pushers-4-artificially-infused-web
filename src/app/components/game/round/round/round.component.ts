@@ -36,7 +36,10 @@ export class RoundComponent implements OnInit {
   constructor(private service: GameService, private audio: AudioService, private sanatizer: DomSanitizer) {}
   
   ngOnInit(): void {
+    console.log('currently set to ' + this.alreadyVoted);
+    console.log('resetting vote');
     this.alreadyVoted = false;
+    this.cachedSolutions = null;
 
     this.service.game
     .pipe(
@@ -101,7 +104,17 @@ export class RoundComponent implements OnInit {
     let count = 0;
     this.game.round?.solutions.forEach(s => count += s.votes);
     if (count == this.game.players.length) this.cachedSolutions = this.game.round?.solutions;
-    return count == this.game.players.length;
+
+    var allHaveVoted = count == this.game.players.length;
+
+    if (allHaveVoted) {
+      this.alreadyVoted = false;
+      if (!this.server) {
+        this.cachedSolutions = null;
+      }
+    }
+
+    return allHaveVoted;
   }
 
   voteFor(playerId: string) {
@@ -109,9 +122,8 @@ export class RoundComponent implements OnInit {
     {
       return;
     }
-
-    this.service.vote(playerId).pipe(take(1)).subscribe();
     this.alreadyVoted = true;
+    this.service.vote(playerId).pipe(take(1)).subscribe();
   }
 
   getPlayerScore(playerId: string): number {
@@ -122,8 +134,11 @@ export class RoundComponent implements OnInit {
   }
 
   endRound() {
+    console.log('calling end round');
     this.service.endRound().pipe(take(1)).subscribe(p => {
+      console.log('round end. resetting vote');
       this.alreadyVoted = false;
+      this.cachedSolutions = null;
     });
   }
     

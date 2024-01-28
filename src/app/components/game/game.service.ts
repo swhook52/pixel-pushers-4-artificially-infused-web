@@ -110,6 +110,7 @@ export class GameService {
   }
 
   endRound(): Observable<void>{
+    console.log('calling end round in the service');
     const code = this.game$.getValue().code;
 
     return this.http.post<void>(`${this.apiBaseUrl}/${code}/endround`, null)
