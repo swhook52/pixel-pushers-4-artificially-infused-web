@@ -81,7 +81,8 @@ export class RoundComponent implements OnInit {
       const total = document.querySelectorAll('.solution').length;
       const active = document.querySelector('.solution.active');
       console.log(active);
-      if (!active){
+      if (!active || this.carouselCount >= total){
+        this.carouselCount = 0;
         document.querySelectorAll('.solution')[0]?.classList.add('active');
         this.carouselCount++;
         return;
@@ -91,7 +92,6 @@ export class RoundComponent implements OnInit {
       const next = document.querySelectorAll('.solution')[this.carouselCount];
       next?.classList.add('active');
       this.carouselCount++;
-      if (this.carouselCount >= total) this.carouselCount = 0;
   }
 
   updateWord(index: number, $event: MatSelectChange) {

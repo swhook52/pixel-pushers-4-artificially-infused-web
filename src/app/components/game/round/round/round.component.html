@@ -133,7 +133,7 @@
 @if(allPlayersHaveVoted()){
 
   @if(server) {
-    <div class="summary" class="server">
+    <div class="summary server">
         @for (solution of cachedSolutions; track solution;){
           <article>
             <span class="votes">{{solution.votes}} <mat-icon>star</mat-icon></span>
