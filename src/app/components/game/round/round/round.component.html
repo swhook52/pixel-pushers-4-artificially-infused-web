@@ -1,20 +1,76 @@
-<div>
+<div *ngIf="!server && player">
     @for (part of templateParts; track $index) {
         @if (part === '{NOUN}') {
-            <!-- <mat-form-field>
-                <mat-label>Favorite food</mat-label>
-                <mat-select>
-                  @for (noun of nouns; track noun) {
+            <mat-form-field>
+                <mat-label>Select</mat-label>
+                <mat-select (selectionChange)="updateWord($index, $event)">
+                  @for (noun of player.nouns; track noun) {
                     <mat-option [value]="noun">{{noun}}</mat-option>
                   }
                 </mat-select>
-            <mat-form-field> -->
+            </mat-form-field>
         }
         @else if (part === '{VERB}') {
-            <span>!NOUN!</span>
+            <mat-form-field>
+                <mat-label>Select</mat-label>
+                <mat-select (selectionChange)="updateWord($index, $event)">
+                  @for (verb of player.verbs; track verb) {
+                    <mat-option [value]="verb">{{verb}}</mat-option>
+                  }
+                </mat-select>
+            </mat-form-field>
+        }
+        @else if (part === '{LOCATION}') {
+            <mat-form-field>
+                <mat-label>Select</mat-label>
+                <mat-select (selectionChange)="updateWord($index, $event)">
+                  @for (location of player.locations; track location) {
+                    <mat-option [value]="location">{{location}}</mat-option>
+                  }
+                </mat-select>
+            </mat-form-field>
+        }
+        @else if (part === '{FOOD}') {
+            <mat-form-field>
+                <mat-label>Select</mat-label>
+                <mat-select (selectionChange)="updateWord($index, $event)">
+                  @for (food of player.foods; track food) {
+                    <mat-option [value]="food">{{food}}</mat-option>
+                  }
+                </mat-select>
+            </mat-form-field>
+        }
+        @else if (part === '{ADJECTIVE}') {
+            <mat-form-field>
+                <mat-label>Select</mat-label>
+                <mat-select (selectionChange)="updateWord($index, $event)">
+                  @for (adjective of player.adjectives; track adjective) {
+                    <mat-option [value]="adjective">{{adjective}}</mat-option>
+                  }
+                </mat-select>
+            </mat-form-field>
         }
         @else {
             <span>{{part}}</span>
         }
     }
+
+    @if (!loading) {
+        <button (click)="submitSolution()">Submit</button>
+    } @else {
+        <button class="disabled">Generating...</button>
+    }
+</div>
+
+<div *ngIf="server">
+    @for (part of templateParts; track $index) {
+        @if (part.startsWith('{')) {
+            <span>_______</span>
+        }
+        @else {
+            <span>{{part}}</span>
+        }
+    }
+
+    <p>Look at your mobile device to fill in the blanks</p>
 </div>

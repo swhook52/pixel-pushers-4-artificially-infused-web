@@ -22,6 +22,10 @@ export class GameService {
     return this.game$;
   }
 
+  get player(): BehaviorSubject<Player>{
+    return this.player$;
+  }
+
   create(): Observable<Game>{
     return this.http.post<Game>(`${this.apiBaseUrl}/`, null)
     .pipe(
@@ -70,6 +74,21 @@ export class GameService {
       take(1),
       catchError(() => {
         this.snackbar.open('Failed to start game', 'Close', { duration: 7000 });
+        return [];
+      })
+    );
+  }
+
+  submitSolution(words: string[]): Observable<void>{
+    const code = this.game$.getValue().code;
+    const playerId = this.player$.getValue().id;
+
+    const data = { words: words };
+    return this.http.post<void>(`${this.apiBaseUrl}/${code}/player/${playerId}/solution`, data)
+    .pipe(
+      take(1),
+      catchError(() => {
+        this.snackbar.open('Failed to post the solution game', 'Close', { duration: 7000 });
         return [];
       })
     );
