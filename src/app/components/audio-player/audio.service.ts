@@ -48,11 +48,17 @@ export class AudioService {
   }
 
   private playMusic(filename: string) {
+    console.log('1');
     if (!this._musicPlyer) return;
+    console.log('2');
     this._musicPlyer.pause();
     this._musicPlyer.src = `../../../assets/audio/music/${filename}`;
     this._musicPlyer.load();
     this._musicPlyer.play();
+  }
+
+  private stopMusic() {
+    this._musicPlyer?.pause;
   }
 
   // playSfx() {
@@ -72,6 +78,7 @@ export class AudioService {
   // }
 
   init() {
+    console.log('got here!');
     this._musicPlyer = document.getElementById('music-player') as HTMLAudioElement || undefined;
     this._sfxPlyer = document.getElementById('sfx-player') as HTMLAudioElement || undefined;
 
