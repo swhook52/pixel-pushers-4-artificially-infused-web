@@ -78,13 +78,19 @@ export class GameService {
   private pollGameData(): void{
     if (this.interval) window.clearInterval(this.interval);
     this.interval = window.setInterval(() => {
-      console.log('polling...');
       const code = this.game$.getValue().code;
-      if (!code) return;
+      if (!code){
+        this.init();
+        return;
+      }
       this.http.get<Game>(`${this.apiBaseUrl}/${code}`).pipe(take(1)).subscribe((data) => {
         this.game$.next(data);
       });
     }, 2000);
+
+    setTimeout(() => {
+      if (this.interval) window.clearInterval(this.interval);
+    }, 3000);
   }
 
   private init() {

@@ -4,6 +4,8 @@ import { Subject, catchError, take, takeUntil } from 'rxjs';
 import { Game } from '../game.model';
 import { DomSanitizer } from '@angular/platform-browser';
 import { AudioService } from '../../.././components/audio-player/audio.service';
+import { createAvatar } from '@dicebear/core';
+import { bottts } from '@dicebear/collection';
 
 @Component({
   selector: 'app-lobby',
@@ -33,7 +35,10 @@ export class LobbyComponent implements OnInit, OnDestroy {
     this.onDestroy$.complete();
   }
 
-  getSvg(svgString: string) {
+  getSvg(seed: string) {
+    const svgString = createAvatar(bottts, {
+      seed: seed,
+    }).toString();
     return this.sanatizer.bypassSecurityTrustHtml(svgString);
   }
 

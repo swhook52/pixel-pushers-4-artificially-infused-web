@@ -30,11 +30,12 @@ export class PlayerInfoComponent implements OnInit{
   }
 
   generateAvatar(): void {
+    const seed = this.player.name + Math.random();
     const svg = this.player.avatarSvg = createAvatar(bottts, {
-      seed: this.player.name + Math.random(),
+      seed: seed,
     }).toString();
     this.svg = this.sanitizer.bypassSecurityTrustHtml(svg);
-    this.player.avatarSvg = svg;
+    this.player.avatarSvg = seed;
   }
 
   close(): void {
