@@ -111,10 +111,20 @@
   <div *ngIf="allPlayersHaveSubmitted() && allImagesHaveBeenGenerated()" class="carousel">
     <div>
       @for (solution of game.round?.solutions; track solution;){
-          <article class="active">
+          <article class="solution">
             <span class="votes">{{solution.votes}} <mat-icon>star</mat-icon></span>
             <img [src]="solution.imageUrl" />
-            <caption>{{solution.prompt}}</caption>
+            <caption>1<span></span>{{solution.prompt}}</caption>
+          </article>
+          <article class="solution">
+            <span class="votes">{{solution.votes}} <mat-icon>star</mat-icon></span>
+            <img [src]="solution.imageUrl" />
+            <caption>2<span></span>{{solution.prompt}}</caption>
+          </article>
+          <article class="solution">
+            <span class="votes">{{solution.votes}} <mat-icon>star</mat-icon></span>
+            <img [src]="solution.imageUrl" />
+            <caption>3<span></span>{{solution.prompt}}</caption>
           </article>
       }
     </div>
@@ -133,7 +143,7 @@
 @if(allPlayersHaveVoted()){
 
   @if(server) {
-    <div class="summary">
+    <div class="summary" class="server">
         @for (solution of cachedSolutions; track solution;){
           <article>
             <span class="votes">{{solution.votes}} <mat-icon>star</mat-icon></span>
@@ -148,7 +158,7 @@
       </div>
   }
   @else {
-    <div class="summary">Checkout your scores! Waiting for the host to start the next round...</div>
+    <div class="summary"><h1>Checkout your scores!</h1><br/>Waiting for the host to start the next round...</div>
   }
 }
 

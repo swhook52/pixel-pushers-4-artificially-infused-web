@@ -30,6 +30,8 @@ export class RoundComponent implements OnInit {
   generatingImage: boolean = false;
   cachedSolutions: any = null;
   alreadyVoted: boolean = false;
+  carouselCount: number = 0
+  carouselInterval: any;
 
   private onDestroy$ = new Subject<void>();
 
@@ -41,12 +43,15 @@ export class RoundComponent implements OnInit {
     this.alreadyVoted = false;
     this.cachedSolutions = null;
 
+    this.initCarousel();
+
     this.service.game
     .pipe(
       distinctUntilChanged(),
       takeUntil(this.onDestroy$)
     ).subscribe((game) => {
-      this.game = game;
+      console.log('game', game);
+      if (JSON.stringify(this.game) !== JSON.stringify(game) ) this.game = game;
       this.player = game.players.find(p => p.id == this.player.id) || this.player;
       if (!this.game.round) return;  
       const pattern = /({[^{}]+})/g;
@@ -54,6 +59,39 @@ export class RoundComponent implements OnInit {
     });
 
     if (!this.server && !this.player.id) this.player.id = localStorage.getItem('player') || '';
+  }
+
+  initCarousel() {
+    const solutionsExist = document.querySelectorAll('.solution').length > 0;
+    if (!solutionsExist) {
+      setTimeout(() => {
+        this.initCarousel();
+      }, 1000);
+      return;
+    }
+    this.carouselCount = 0;
+    this.carouselNext();
+    if (this.carouselInterval) clearInterval(this.carouselInterval);
+    this.carouselInterval = setInterval(() => {
+      this.carouselNext();
+    }, 12500);
+  }
+
+  carouselNext() {
+      const total = document.querySelectorAll('.solution').length;
+      const active = document.querySelector('.solution.active');
+      console.log(active);
+      if (!active){
+        document.querySelectorAll('.solution')[0]?.classList.add('active');
+        this.carouselCount++;
+        return;
+      }
+      console.log(this.carouselCount);
+      active.classList.remove('active');
+      const next = document.querySelectorAll('.solution')[this.carouselCount];
+      next?.classList.add('active');
+      this.carouselCount++;
+      if (this.carouselCount >= total) this.carouselCount = 0;
   }
 
   updateWord(index: number, $event: MatSelectChange) {
