@@ -1,0 +1,20 @@
+<div>
+    @for (part of templateParts; track $index) {
+        @if (part === '{NOUN}') {
+            <!-- <mat-form-field>
+                <mat-label>Favorite food</mat-label>
+                <mat-select>
+                  @for (noun of nouns; track noun) {
+                    <mat-option [value]="noun">{{noun}}</mat-option>
+                  }
+                </mat-select>
+            <mat-form-field> -->
+        }
+        @else if (part === '{VERB}') {
+            <span>!NOUN!</span>
+        }
+        @else {
+            <span>{{part}}</span>
+        }
+    }
+</div>
