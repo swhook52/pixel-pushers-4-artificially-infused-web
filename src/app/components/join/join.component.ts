@@ -45,7 +45,6 @@ export class JoinComponent implements OnInit {
         })
       )
       .subscribe((result) => {
-        console.log(result);
         if(!result) return;
         this.game.join(this.gameId, result.name, result.avatarSvg).pipe(take(1)).subscribe((players) => {
           this.router.navigate([`/game/${this.gameId}`]);

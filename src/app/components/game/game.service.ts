@@ -13,6 +13,7 @@ export class GameService {
   private interval: number | null = null;
   private game$: BehaviorSubject<Game> = new BehaviorSubject<Game>({} as Game);
   private player$: BehaviorSubject<Player> = new BehaviorSubject<Player>({} as Player);
+  hasInitialized: boolean = false;
 
   constructor(private router: Router, private http: HttpClient, private snackbar: MatSnackBar) {
     this.init();
@@ -63,6 +64,7 @@ export class GameService {
       tap(() => {
         this.pollGameData();
         this.player$.next(player);
+        localStorage.setItem('player', name);
       })
     );
   }
@@ -81,7 +83,7 @@ export class GameService {
 
   submitSolution(words: string[]): Observable<void>{
     const code = this.game$.getValue().code;
-    const playerId = this.player$.getValue().id;
+    const playerId = this.player$.getValue().id || localStorage.getItem('player');
 
     const data = { words: words };
     return this.http.post<void>(`${this.apiBaseUrl}/${code}/player/${playerId}/solution`, data)
@@ -96,20 +98,25 @@ export class GameService {
 
   private pollGameData(): void{
     if (this.interval) window.clearInterval(this.interval);
+
+    this.fetchGameData();
+
     this.interval = window.setInterval(() => {
-      const code = this.game$.getValue().code;
-      if (!code){
-        this.init();
-        return;
-      }
-      this.http.get<Game>(`${this.apiBaseUrl}/${code}`).pipe(take(1)).subscribe((data) => {
-        this.game$.next(data);
-      });
+      this.fetchGameData();
     }, 2000);
 
-    setTimeout(() => {
-      if (this.interval) window.clearInterval(this.interval);
-    }, 3000);
+    setTimeout(() => { if (this.interval) window.clearInterval(this.interval); }, 3000);
+  }
+  
+  private fetchGameData(): void{
+    const code = this.game$.getValue().code;
+    if (!code){
+      this.init();
+      return;
+    }
+    this.http.get<Game>(`${this.apiBaseUrl}/${code}`).pipe(take(1)).subscribe((data) => {
+      this.game$.next(data);
+    });
   }
 
   private init() {
@@ -120,5 +127,6 @@ export class GameService {
       this.game$.next({ code: id || "", players: [], round: {} as Round});
       this.pollGameData();
     }
+    this.hasInitialized = true;
   }
 }

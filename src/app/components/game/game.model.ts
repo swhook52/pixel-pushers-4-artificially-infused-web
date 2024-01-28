@@ -27,7 +27,7 @@ export interface Round {
 }
 
 export interface Solutions {
-    playerId: number;
+    playerId: string;
     prompt: string;
     imageUrl: string;
     votes: number;

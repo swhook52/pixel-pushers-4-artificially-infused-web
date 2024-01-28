@@ -14,11 +14,13 @@ import { RoundComponent } from '../game/round/round/round.component';
 })
 export class ServeComponent implements OnInit{
   game: Game = this.service.game.getValue();
+  init = false;
   constructor(private service: GameService) {}
 
   ngOnInit(): void {
     this.service.game.subscribe((game) => {
       this.game = game;
+      this.init = true;
     });
   }
 }

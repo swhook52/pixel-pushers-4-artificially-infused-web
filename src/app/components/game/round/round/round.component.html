@@ -1,8 +1,10 @@
-<div *ngIf="!server && player">
+<div class="timer" *ngIf="!allPlayersHaveSubmitted()" [class.server]="server">0:00</div>
+<section>
+<div class="prompt" *ngIf="!server && player && !playerHasSubmitted()">
     @for (part of templateParts; track $index) {
         @if (part === '{NOUN}') {
             <mat-form-field>
-                <mat-label>Select</mat-label>
+                <mat-label>Noun</mat-label>
                 <mat-select (selectionChange)="updateWord($index, $event)">
                   @for (noun of player.nouns; track noun) {
                     <mat-option [value]="noun">{{noun}}</mat-option>
@@ -12,7 +14,7 @@
         }
         @else if (part === '{VERB}') {
             <mat-form-field>
-                <mat-label>Select</mat-label>
+                <mat-label>Verb</mat-label>
                 <mat-select (selectionChange)="updateWord($index, $event)">
                   @for (verb of player.verbs; track verb) {
                     <mat-option [value]="verb">{{verb}}</mat-option>
@@ -22,7 +24,7 @@
         }
         @else if (part === '{LOCATION}') {
             <mat-form-field>
-                <mat-label>Select</mat-label>
+                <mat-label>Location</mat-label>
                 <mat-select (selectionChange)="updateWord($index, $event)">
                   @for (location of player.locations; track location) {
                     <mat-option [value]="location">{{location}}</mat-option>
@@ -32,7 +34,7 @@
         }
         @else if (part === '{FOOD}') {
             <mat-form-field>
-                <mat-label>Select</mat-label>
+                <mat-label>Food</mat-label>
                 <mat-select (selectionChange)="updateWord($index, $event)">
                   @for (food of player.foods; track food) {
                     <mat-option [value]="food">{{food}}</mat-option>
@@ -42,7 +44,7 @@
         }
         @else if (part === '{ADJECTIVE}') {
             <mat-form-field>
-                <mat-label>Select</mat-label>
+                <mat-label>Adjective</mat-label>
                 <mat-select (selectionChange)="updateWord($index, $event)">
                   @for (adjective of player.adjectives; track adjective) {
                     <mat-option [value]="adjective">{{adjective}}</mat-option>
@@ -62,15 +64,74 @@
     }
 </div>
 
-<div *ngIf="server">
-    @for (part of templateParts; track $index) {
-        @if (part.startsWith('{')) {
-            <span>_______</span>
-        }
-        @else {
-            <span>{{part}}</span>
-        }
-    }
+@if(playerHasSubmitted() && !server){
+  <div class="waiting">
+    <mat-spinner *ngIf="!allImagesHaveBeenGenerated()"></mat-spinner>
+    <p *ngIf="allPlayersHaveSubmitted() && !allImagesHaveBeenGenerated()">Generating Masterpieces...</p>
+    <p *ngIf="!allPlayersHaveSubmitted()">Awaiting other players...</p>
+    <p *ngIf="allImagesHaveBeenGenerated()">Get ready to vote!</p>
+  </div>
+}
 
-    <p>Look at your mobile device to fill in the blanks</p>
-</div>
+@if(server) {
+  <div *ngIf="!allPlayersHaveSubmitted()" class="prompt server">
+      @for (part of templateParts; track $index) {
+          @if (part.startsWith('{')) {
+              <span [attr.data-type]="part.split('{')[1].split('}')[0]">_______</span>
+          }
+          @else {
+              <span>{{part}}</span>
+          }
+      }
+  </div>
+
+  <div *ngIf="allPlayersHaveSubmitted() && !allImagesHaveBeenGenerated()" class="prompt server">
+      <mat-spinner *ngIf="!allImagesHaveBeenGenerated()"></mat-spinner>
+      Calculating Masterpiece Dankness Rating (MDR)...
+  </div>
+
+  <div *ngIf="allPlayersHaveSubmitted() && allImagesHaveBeenGenerated()" class="carousel">
+    <div>
+
+      <!-- This FOR simulates active, can/should/WILL be removed-->
+      @for (solution of game.round?.solutions; track solution;){
+          <article class="active">
+            <span class="votes">{{solution.votes}} <mat-icon>star</mat-icon></span>
+            <img [src]="solution.imageUrl" />
+            <span class="player">
+                <div [innerHTML]="getSvg(getPlayer(solution.playerId)!.avatarUrl)"></div>
+                <p>{{getPlayer(solution.playerId)!.id}}</p>
+            </span>
+            <caption>{{solution.prompt}}</caption>
+          </article>
+      }
+
+      @for (solution of game.round?.solutions; track solution;){
+        <article>
+          <span class="votes">{{solution.votes}} <mat-icon>star</mat-icon></span>
+          <img [src]="solution.imageUrl" />
+          <span class="player">
+              <div [innerHTML]="getSvg(getPlayer(solution.playerId)!.avatarUrl)"></div>
+              <p>{{getPlayer(solution.playerId)!.id}}</p>
+          </span>
+          <caption>{{solution.prompt}}</caption>
+        </article>
+    }
+    </div>
+  </div>
+
+  <div *ngIf="!allPlayersHaveSubmitted()" class="players">
+    @for (player of game.players; track player;){
+        <span [class.done]="playerHasSubmitted(player.id)">
+            <div [innerHTML]="getSvg(player.avatarUrl)"></div>
+            <p>{{player.id}}</p>
+        </span>
+    }
+  </div>
+}
+
+</section>
+
+@if(server){
+<p class="notice">Check your mobile device, fool! <mat-icon>arrow_downward</mat-icon></p>
+}
