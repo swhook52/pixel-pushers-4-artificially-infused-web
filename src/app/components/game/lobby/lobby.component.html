@@ -1,8 +1,8 @@
 <h1><small>Join Code</small>{{game.code}}</h1>
 <section>
-<h2>Waiting for players...</h2>
+<h2>{{server ? 'Waiting for players...' : 'Players'}}</h2>
 <div class="players">
-@for (player of game.players; track player){
+    @for (player of game.players; track player;){
         <span>
             <div [innerHTML]="getSvg(player.avatarUrl)"></div>
             <p>{{player.name}}</p>
@@ -10,3 +10,8 @@
     }
 </div>
 </section>
+@if (server){
+    <button (click)="startGame()">Start Game</button>
+} @else {
+    <small class="status">Waiting for host to start the game...</small>
+}

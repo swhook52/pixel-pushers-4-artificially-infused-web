@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { GameService } from '../game.service';
 import { Subject, takeUntil } from 'rxjs';
 import { Game } from '../game.model';
@@ -13,6 +13,7 @@ import { AudioService } from '../../.././components/audio-player/audio.service';
   styleUrl: './lobby.component.scss'
 })
 export class LobbyComponent implements OnInit, OnDestroy {
+  @Input() server: boolean = false;
   game: Game = this.service.game.getValue();
 
   private onDestroy$ = new Subject<void>();
@@ -33,5 +34,9 @@ export class LobbyComponent implements OnInit, OnDestroy {
 
   getSvg(svgString: string) {
     return this.sanatizer.bypassSecurityTrustHtml(svgString);
+  }
+
+  startGame(): void {
+    //this.service.startGame().subscribe();
   }
 }

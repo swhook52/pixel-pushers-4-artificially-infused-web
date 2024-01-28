@@ -58,6 +58,10 @@ export class GameService {
     );
   }
 
+  startGame() {
+    
+  }
+
   private pollGameData(): void{
     if (this.interval) window.clearInterval(this.interval);
     this.interval = window.setInterval(() => {

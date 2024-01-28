@@ -3,7 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { adventurer, lorelei } from '@dicebear/collection';
+import { adventurer, bottts, lorelei } from '@dicebear/collection';
 import { createAvatar } from '@dicebear/core';
 
 export interface Player {
@@ -30,7 +30,7 @@ export class PlayerInfoComponent implements OnInit{
   }
 
   generateAvatar(): void {
-    const svg = this.player.avatarSvg = createAvatar(adventurer, {
+    const svg = this.player.avatarSvg = createAvatar(bottts, {
       seed: this.player.name + Math.random(),
     }).toString();
     this.svg = this.sanitizer.bypassSecurityTrustHtml(svg);
