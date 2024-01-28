@@ -1,4 +1,6 @@
-<h1><small>Join Code</small>{{game.code}}</h1>
+@if (server){
+    <h1><small>Join Code</small>{{game.code}}</h1>
+}
 <section>
 <h2>{{server ? 'Waiting for players...' : 'Players'}}</h2>
 <div class="players">

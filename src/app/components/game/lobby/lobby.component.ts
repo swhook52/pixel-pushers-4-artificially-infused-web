@@ -1,6 +1,6 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { GameService } from '../game.service';
-import { Subject, catchError, take, takeUntil } from 'rxjs';
+import { Subject, catchError, take, takeUntil, distinctUntilChanged } from 'rxjs';
 import { Game } from '../game.model';
 import { DomSanitizer } from '@angular/platform-browser';
 import { AudioService } from '../../.././components/audio-player/audio.service';
@@ -25,7 +25,7 @@ export class LobbyComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.audio.playLobbyMusic();
-    this.service.game.pipe(takeUntil(this.onDestroy$)).subscribe((game) => {
+    this.service.game.pipe(distinctUntilChanged(), takeUntil(this.onDestroy$)).subscribe((game) => {
       this.game = game;
     });
   }
