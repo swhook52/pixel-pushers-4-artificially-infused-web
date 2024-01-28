@@ -131,21 +131,25 @@
 }
 
 @if(allPlayersHaveVoted()){
-  <div class="summary">
 
-    @for (solution of cachedSolutions; track solution;){
-      <article>
-        <span class="votes">{{solution.votes}} <mat-icon>star</mat-icon></span>
-        <img [src]="solution.imageUrl" />
-        <span class="player">
-            <div [innerHTML]="getSvg(getPlayer(solution.playerId)!.avatarUrl)"></div>
-            <p>{{getPlayer(solution.playerId)!.id}}</p>
-          </span>
-          <span class="score">{{getPlayerScore(solution.playerId)}}<small>score</small></span>
-      </article>
-    }
-
-  </div>
+  @if(server) {
+    <div class="summary">
+        @for (solution of cachedSolutions; track solution;){
+          <article>
+            <span class="votes">{{solution.votes}} <mat-icon>star</mat-icon></span>
+            <img [src]="solution.imageUrl" />
+            <span class="player">
+                <div [innerHTML]="getSvg(getPlayer(solution.playerId)!.avatarUrl)"></div>
+                <p>{{getPlayer(solution.playerId)!.id}}</p>
+              </span>
+              <span class="score">{{getPlayerScore(solution.playerId)}}<small>score</small></span>
+          </article>
+        }
+      </div>
+  }
+  @else {
+    <div class="summary">Checkout your scores! Waiting for the host to start the next round...</div>
+  }
 }
 
 </section>
