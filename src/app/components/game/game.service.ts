@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable, catchError, take, tap } from 'rxjs';
-import { Game, Round } from './game.model';
+import { Game, Player, Round } from './game.model';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Injectable({
@@ -11,7 +11,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class GameService {
   private readonly apiBaseUrl = 'https://app-artifically-infused-api-dev.azurewebsites.net/game';
   private interval: number | null = null;
-  private game$: BehaviorSubject<Game> = new BehaviorSubject<Game>({ code: "", players: [], round: {} as Round });
+  private game$: BehaviorSubject<Game> = new BehaviorSubject<Game>({} as Game);
+  private player$: BehaviorSubject<Player> = new BehaviorSubject<Player>({} as Player);
 
   constructor(private router: Router, private http: HttpClient, private snackbar: MatSnackBar) {
     this.init();
@@ -37,12 +38,15 @@ export class GameService {
   }
 
   join(code: string, name: string, avatarUrl: string): Observable<[]>{
-    const payload = {
+    const payload: Player = {
       id: name,
       name: name,
       avatarUrl: avatarUrl,
       nouns: [],
       verbs: [],
+      locations: [],
+      foods: [],
+      adjectives: [],
       score: 0
     }
     return this.http.post<[]>(`${this.apiBaseUrl}/${code}/player`, payload)
@@ -54,6 +58,7 @@ export class GameService {
       }),
       tap(() => {
         this.pollGameData();
+        this.player$.next(payload);
       })
     );
   }

@@ -9,7 +9,7 @@ export interface Game {
 }
 
 export interface Player {
-    id: number;
+    id: string;
     name: string;
     avatarUrl: string;
     nouns: string[];

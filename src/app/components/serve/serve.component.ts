@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { LobbyComponent } from '../game/lobby/lobby.component';
+import { GameService } from '../game/game.service';
 
 @Component({
   selector: 'app-serve',
@@ -9,6 +10,7 @@ import { LobbyComponent } from '../game/lobby/lobby.component';
   styleUrl: './serve.component.scss'
 })
 export class ServeComponent {
-  constructor() {
+  constructor(private service: GameService) {
+    //this.game
   }
 }
