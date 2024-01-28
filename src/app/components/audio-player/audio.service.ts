@@ -21,6 +21,14 @@ export class AudioService {
     this.playMusic('lobby.mp3');
   }
 
+  playMainMenuMusic(){
+    this.playMusic('mainMenu.mp3');
+  }
+
+  playPromptEntryMusic(){
+    this.playMusic('playerPromptInput.mp3');
+  }
+
   get musicVolume(): BehaviorSubject<number>{
     return this._musicVolume$;
   }
