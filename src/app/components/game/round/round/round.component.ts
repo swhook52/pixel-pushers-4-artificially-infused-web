@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { AfterViewInit, Component, Input, OnInit } from '@angular/core';
 import { Game, Player } from '../../game.model';
 import { GameService } from '../../game.service';
 import { AudioService } from '../../../audio-player/audio.service';
@@ -36,6 +36,8 @@ export class RoundComponent implements OnInit {
   constructor(private service: GameService, private audio: AudioService, private sanatizer: DomSanitizer) {}
   
   ngOnInit(): void {
+    this.alreadyVoted = false;
+
     this.service.game
     .pipe(
       distinctUntilChanged(),
@@ -120,7 +122,9 @@ export class RoundComponent implements OnInit {
   }
 
   endRound() {
-    this.service.endRound().pipe(take(1)).subscribe();
+    this.service.endRound().pipe(take(1)).subscribe(p => {
+      this.alreadyVoted = false;
+    });
   }
     
 }
